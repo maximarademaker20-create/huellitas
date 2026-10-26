@@ -1,0 +1,50 @@
+{% extends 'veterinaria/base.html' %}
+{% block titulo %}Mascotas{% endblock %}
+{% block encabezado %}Mascotas{% endblock %}
+{% block migas %}<a href="{% url 'inicio' %}">Inicio</a> &nbsp;›&nbsp; Mascotas{% endblock %}
+
+{% block contenido %}
+<div class="tarjeta">
+  <form class="filtros">
+    <div class="buscador">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input type="search" name="q" value="{{ buscar }}" placeholder="Buscar por mascota, dueño o DNI...">
+    </div>
+    <select name="especie" onchange="this.form.submit()">
+      <option value="">Todas las especies</option>
+      {% for e in especies %}<option value="{{ e.pk }}" {% if especie == e.pk|stringformat:"s" %}selected{% endif %}>{{ e }}</option>{% endfor %}
+    </select>
+    <select name="estado" onchange="this.form.submit()">
+      <option value="activo" {% if estado == 'activo' %}selected{% endif %}>Activos</option>
+      <option value="baja" {% if estado == 'baja' %}selected{% endif %}>Dados de baja</option>
+      <option value="todos" {% if estado == 'todos' %}selected{% endif %}>Todos</option>
+    </select>
+    <a href="{% url 'nueva_mascota' %}" class="boton">+ Nueva mascota</a>
+  </form>
+
+  <div class="tabla-contenedor">
+    <table>
+      <thead><tr><th>Mascota</th><th>Especie</th><th>Raza</th><th>Dueño</th><th>Nacimiento</th><th>Estado</th><th>Acciones</th></tr></thead>
+      <tbody>
+        {% for m in mascotas %}
+        <tr>
+          <td><div class="mascota-celda">{% include 'veterinaria/_huella.html' %}{{ m.nombre }}</div></td>
+          <td>{{ m.raza.especie }}</td>
+          <td>{{ m.raza.nombre }}</td>
+          <td>{{ m.dueno }}</td>
+          <td>{{ m.fecha_nacimiento|date:"d/m/Y"|default:"—" }}</td>
+          <td><span class="etiqueta {{ m.estado }}">{{ m.get_estado_display }}</span></td>
+          <td><div class="acciones">
+            <a href="{% url 'ficha' m.pk %}" class="boton chico">Ver</a>
+            <a href="{% url 'editar_mascota' m.pk %}" class="boton secundario chico">Editar</a>
+          </div></td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="7" class="vacio">No se encontraron mascotas.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="paginacion"><span>{{ mascotas|length }} paciente{{ mascotas|length|pluralize }}</span></div>
+</div>
+{% endblock %}

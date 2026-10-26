@@ -1,0 +1,69 @@
+{% load static %}<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block titulo %}Inicio{% endblock %} · Huellitas</title>
+  <link rel="icon" href="{% static 'veterinaria/img/huella.png' %}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'veterinaria/css/estilos.css' %}">
+</head>
+<body>
+  {% with seccion=request.resolver_match.url_name %}
+  <div class="app">
+    {# ---------- Menú lateral (igual en todas las páginas) ---------- #}
+    <nav class="lateral">
+      <a href="{% url 'inicio' %}" class="logo"><img src="{% static 'veterinaria/img/logo_horizontal.png' %}" alt="Huellitas"></a>
+
+      <a href="{% url 'inicio' %}" {% if seccion == 'inicio' %}class="activo"{% endif %}>
+        <svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg> Inicio</a>
+      <a href="{% url 'mascotas' %}" {% if seccion in 'mascotas nueva_mascota ficha editar_mascota nueva_consulta registrar_vacuna' %}class="activo"{% endif %}>
+        <svg viewBox="0 0 24 24"><circle cx="5.5" cy="10" r="2"/><circle cx="9" cy="5.5" r="2"/><circle cx="15" cy="5.5" r="2"/><circle cx="18.5" cy="10" r="2"/><path d="M12 12c-3 0-6 4-6 6.5 0 1.5 1.5 2.5 3 2 1-.3 2-.8 3-.8s2 .5 3 .8c1.5.5 3-.5 3-2C18 16 15 12 12 12z"/></svg> Mascotas</a>
+      <a href="{% url 'duenos' %}" {% if seccion in 'duenos nuevo_dueno editar_dueno' %}class="activo"{% endif %}>
+        <svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="4"/><path d="M2 21c0-4 3-6 7-6s7 2 7 6"/><path d="M16 4a4 4 0 0 1 0 8"/><path d="M22 21c0-3-2-5-4-5.5"/></svg> Dueños</a>
+      <a href="{% url 'turnos' %}" {% if seccion == 'turnos' %}class="activo"{% endif %}>
+        <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg> Turnos</a>
+      <a href="{% url 'especies' %}" {% if seccion == 'especies' %}class="activo"{% endif %}>
+        <svg viewBox="0 0 24 24"><path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1.5"/></svg> Especies y razas</a>
+      {% if user.is_staff %}
+      <a href="{% url 'admin:index' %}">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg> Administración</a>
+      {% endif %}
+
+      <form method="post" action="{% url 'logout' %}" class="salir">
+        {% csrf_token %}
+        <button type="submit"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg> Cerrar sesión</button>
+      </form>
+    </nav>
+
+    <main class="principal">
+      {# ---------- Barra superior ---------- #}
+      <header class="barra-superior">
+        <div>
+          <h1>{% block encabezado %}{% endblock %}</h1>
+          <div class="migas">{% block migas %}{% endblock %}</div>
+        </div>
+        <div class="usuario">
+          <div class="avatar">{{ user.first_name|default:user.username|slice:":1"|upper }}{{ user.last_name|slice:":1"|upper }}</div>
+          <div>{{ user.get_full_name|default:user.username }}
+            <small>{% if user.groups.first %}{{ user.groups.first.name }}{% elif user.is_superuser %}Administración{% else %}Personal{% endif %}</small>
+          </div>
+        </div>
+      </header>
+
+      {% block contenido %}{% endblock %}
+    </main>
+  </div>
+  {% endwith %}
+
+  {# Mensajes de confirmación (abajo a la derecha) #}
+  {% if messages %}
+    <div class="avisos">
+      {% for m in messages %}<div class="aviso visible {{ m.tags }}">{{ m }}</div>{% endfor %}
+    </div>
+    <script>setTimeout(() => document.querySelectorAll('.aviso').forEach(a => a.classList.remove('visible')), 3500);</script>
+  {% endif %}
+  {% block scripts %}{% endblock %}
+</body>
+</html>

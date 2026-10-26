@@ -1,0 +1,15 @@
+{% extends 'veterinaria/base.html' %}
+{% block titulo %}{% if dueno %}Editar dueño{% else %}Nuevo dueño{% endif %}{% endblock %}
+{% block encabezado %}{% if dueno %}Editar a {{ dueno }}{% else %}Nuevo dueño{% endif %}{% endblock %}
+{% block migas %}<a href="{% url 'duenos' %}">Dueños</a> &nbsp;›&nbsp; {% if dueno %}Editar{% else %}Nuevo dueño{% endif %}{% endblock %}
+
+{% block contenido %}
+<form method="post" class="tarjeta formulario">
+  {% csrf_token %}
+  {% for campo in form %}{% include 'veterinaria/_campo.html' %}{% endfor %}
+  <div class="acciones-form">
+    <span class="nota">El teléfono se usa para enviar los recordatorios por WhatsApp.</span>
+    <div><a href="{% url 'duenos' %}" class="boton secundario">Cancelar</a><button class="boton" type="submit">Guardar dueño</button></div>
+  </div>
+</form>
+{% endblock %}

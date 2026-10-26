@@ -1,0 +1,101 @@
+{% extends 'veterinaria/base.html' %}
+{% load static %}
+{% block titulo %}{{ mascota }}{% endblock %}
+{% block encabezado %}Ficha del paciente{% endblock %}
+{% block migas %}<a href="{% url 'mascotas' %}">Mascotas</a> &nbsp;›&nbsp; {{ mascota }}{% endblock %}
+
+{% block contenido %}
+<section class="tarjeta ficha-cabecera">
+  <div class="foto-mascota"><img src="{% static 'veterinaria/img/huella.png' %}" alt=""></div>
+  <div class="ficha-datos">
+    <h1>{{ mascota }} <span class="etiqueta {{ mascota.estado }}">{{ mascota.get_estado_display }}</span></h1>
+    <div class="datos-grilla">
+      <div><span>Especie</span><b>{{ mascota.especie }}</b></div>
+      <div><span>Raza</span><b>{{ mascota.raza.nombre }}</b></div>
+      <div><span>Sexo</span><b>{{ mascota.get_sexo_display }}</b></div>
+      <div><span>Edad</span><b>{% if mascota.edad is not None %}{{ mascota.edad }} año{{ mascota.edad|pluralize }}{% else %}—{% endif %}</b></div>
+    </div>
+    {% if mascota.color %}<p class="migas" style="margin-top:8px">{{ mascota.color }}</p>{% endif %}
+    {% if mascota.estado == 'baja' %}<p class="alerta" style="margin-top:10px">Dada de baja el {{ mascota.fecha_baja|date:"d/m/Y" }} · Motivo: {{ mascota.motivo_baja }}</p>{% endif %}
+  </div>
+  <div class="dueno-caja">
+    <small>Dueño</small>
+    <div><b>{{ mascota.dueno }}</b></div>
+    <div>{{ mascota.dueno.telefono }}</div>
+    <div class="acciones">
+      <a href="{% url 'editar_mascota' mascota.pk %}" class="boton secundario chico">Editar ficha</a>
+      {% if mascota.estado == 'activo' %}
+        <button class="boton peligro chico" type="button" onclick="document.getElementById('baja').showModal()">Dar de baja</button>
+      {% else %}
+        <form method="post" action="{% url 'reactivar' mascota.pk %}">{% csrf_token %}<button class="boton chico" type="submit">Reactivar</button></form>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<div class="pestanas-fila">
+  <div class="pestanas">
+    <button class="activa" onclick="filtrar(this, 'todos')">Historial</button>
+    <button onclick="filtrar(this, 'consulta')">Consultas</button>
+    <button onclick="filtrar(this, 'vacuna')">Vacunas</button>
+  </div>
+  {% if mascota.estado == 'activo' %}
+  <div class="botones">
+    <a href="{% url 'nueva_consulta' mascota.pk %}" class="boton">+ Nueva consulta</a>
+    <a href="{% url 'registrar_vacuna' mascota.pk %}" class="boton secundario">+ Registrar vacuna</a>
+  </div>
+  {% endif %}
+</div>
+
+<section class="linea-tiempo">
+  {% for e in historial %}
+    <div class="evento {{ e.tipo }}">
+      <div class="tarjeta">
+        <span class="fecha">{{ e.fecha|date:"d/m/Y" }}</span>
+        <div class="contenido">
+          {% if e.tipo == 'consulta' %}
+            <b>{{ e.obj.motivo }}</b> <span class="etiqueta violeta">Consulta</span>
+            <p><b>Diagnóstico:</b> {{ e.obj.diagnostico }}</p>
+            {% if e.obj.tratamiento %}<p><b>Tratamiento:</b> {{ e.obj.tratamiento }}</p>{% endif %}
+          {% else %}
+            <b>Vacuna {{ e.obj.vacuna|lower }}</b> <span class="etiqueta activo">Vacuna</span>
+            <p>{% if e.obj.proxima_dosis %}Próxima dosis: {{ e.obj.proxima_dosis|date:"d/m/Y" }}{% else %}Dosis única{% endif %}</p>
+          {% endif %}
+        </div>
+        {% if e.tipo == 'consulta' and e.obj.peso %}<small class="migas">{{ e.obj.peso }} kg</small>{% endif %}
+      </div>
+    </div>
+  {% empty %}
+    <p class="vacio tarjeta">Sin historial todavía.</p>
+  {% endfor %}
+</section>
+
+{# Ventana para confirmar la baja #}
+<dialog id="baja" class="tarjeta">
+  <form method="post" action="{% url 'dar_baja' mascota.pk %}">
+    {% csrf_token %}
+    <h2>Dar de baja a {{ mascota }}</h2>
+    <p class="migas" style="margin:8px 0 16px">Su historial no se borra. Se puede reactivar más adelante.</p>
+    {% include 'veterinaria/_campo.html' with campo=baja_form.motivo %}
+    <div class="acciones-form" style="justify-content:flex-end">
+      <div>
+        <button type="button" class="boton secundario" onclick="this.closest('dialog').close()">Cancelar</button>
+        <button type="submit" class="boton peligro">Dar de baja</button>
+      </div>
+    </div>
+  </form>
+</dialog>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // Pestañas: muestra todo el historial, solo consultas o solo vacunas
+  function filtrar(boton, tipo) {
+    document.querySelectorAll('.pestanas button').forEach(b => b.classList.remove('activa'));
+    boton.classList.add('activa');
+    document.querySelectorAll('.evento').forEach(e => {
+      e.style.display = (tipo === 'todos' || e.classList.contains(tipo)) ? '' : 'none';
+    });
+  }
+</script>
+{% endblock %}

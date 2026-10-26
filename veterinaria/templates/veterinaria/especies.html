@@ -1,0 +1,32 @@
+{% extends 'veterinaria/base.html' %}
+{% block titulo %}Especies y razas{% endblock %}
+{% block encabezado %}Especies y razas{% endblock %}
+{% block migas %}<a href="{% url 'inicio' %}">Inicio</a> &nbsp;›&nbsp; Especies y razas{% endblock %}
+
+{% block contenido %}
+<section class="dos-columnas" style="margin-bottom:18px">
+  <form method="post" class="tarjeta formulario">
+    {% csrf_token %}
+    <h2>Agregar raza</h2>
+    {% include 'veterinaria/_campo.html' with campo=raza_form.especie %}
+    {% include 'veterinaria/_campo.html' with campo=raza_form.nombre %}
+    {% for e in raza_form.non_field_errors %}<small class="error completo">{{ e }}</small>{% endfor %}
+    <div class="acciones-form" style="justify-content:flex-end"><button class="boton" type="submit" name="agregar_raza">Agregar raza</button></div>
+  </form>
+  <form method="post" class="tarjeta formulario">
+    {% csrf_token %}
+    <h2>Agregar especie</h2>
+    {% include 'veterinaria/_campo.html' with campo=especie_form.nombre clase='completo' %}
+    <div class="acciones-form" style="justify-content:flex-end"><button class="boton" type="submit" name="agregar_especie">Agregar especie</button></div>
+  </form>
+</section>
+
+<section class="indicadores">
+  {% for e in especies %}
+  <div class="tarjeta">
+    <div class="tarjeta-titulo"><h2>{{ e }}</h2><span class="etiqueta violeta">{{ e.razas.all|length }} raza{{ e.razas.all|length|pluralize }}</span></div>
+    <div class="chips">{% for r in e.razas.all %}<span class="etiqueta activo">{{ r.nombre }}</span>{% empty %}<span class="vacio">Sin razas</span>{% endfor %}</div>
+  </div>
+  {% endfor %}
+</section>
+{% endblock %}

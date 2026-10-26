@@ -1,0 +1,37 @@
+{% extends 'veterinaria/base.html' %}
+{% block titulo %}Dueños{% endblock %}
+{% block encabezado %}Dueños{% endblock %}
+{% block migas %}<a href="{% url 'inicio' %}">Inicio</a> &nbsp;›&nbsp; Dueños{% endblock %}
+
+{% block contenido %}
+<div class="tarjeta">
+  <form class="filtros">
+    <div class="buscador">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input type="search" name="q" value="{{ buscar }}" placeholder="Buscar dueño por nombre o DNI...">
+    </div>
+    <a href="{% url 'nuevo_dueno' %}" class="boton">+ Nuevo dueño</a>
+  </form>
+  <div class="tabla-contenedor">
+    <table>
+      <thead><tr><th>Nombre</th><th>DNI</th><th>Teléfono</th><th>Mascotas</th><th>Acciones</th></tr></thead>
+      <tbody>
+        {% for d in duenos %}
+        <tr>
+          <td><b>{{ d.apellido }}, {{ d.nombre }}</b></td>
+          <td>{{ d.dni }}</td>
+          <td>{{ d.telefono }}</td>
+          <td>{% for m in d.mascotas.all %}<a href="{% url 'ficha' m.pk %}">{{ m }}</a>{% if not forloop.last %}, {% endif %}{% empty %}—{% endfor %}</td>
+          <td><div class="acciones">
+            <a href="{% url 'editar_dueno' d.pk %}" class="boton secundario chico">Editar</a>
+            <a href="{% url 'nueva_mascota' %}?dueno={{ d.pk }}" class="boton chico">+ Mascota</a>
+          </div></td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5" class="vacio">No se encontraron dueños.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

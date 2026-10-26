@@ -1,0 +1,78 @@
+{% extends 'veterinaria/base.html' %}
+{% block titulo %}Turnos{% endblock %}
+{% block encabezado %}Turnos{% endblock %}
+{% block migas %}<a href="{% url 'inicio' %}">Inicio</a> &nbsp;›&nbsp; Turnos{% endblock %}
+
+{% block contenido %}
+<section class="turnos-grilla">
+  <div class="tarjeta">
+    <div class="calendario-cab">
+      <a href="?fecha={{ mes_anterior|date:'Y-m-d' }}">‹</a>
+      <span>{{ dia|date:"F Y"|capfirst }}</span>
+      <a href="?fecha={{ mes_siguiente|date:'Y-m-d' }}">›</a>
+    </div>
+    <div class="calendario">
+      <div class="dia-nombre">L</div><div class="dia-nombre">M</div><div class="dia-nombre">M</div><div class="dia-nombre">J</div><div class="dia-nombre">V</div><div class="dia-nombre">S</div><div class="dia-nombre">D</div>
+      {% for semana in semanas %}{% for d in semana %}
+        {% if d.month == dia.month %}
+          <a href="?fecha={{ d|date:'Y-m-d' }}" class="dia{% if d == dia %} hoy{% elif d == hoy %} actual{% endif %}{% if d in dias_con_turnos %} con-turnos{% endif %}">{{ d.day }}</a>
+        {% else %}<div></div>{% endif %}
+      {% endfor %}{% endfor %}
+    </div>
+    <p class="migas" style="margin-top:10px"><a href="?">Ir a hoy</a></p>
+  </div>
+
+  <div class="tarjeta">
+    <div class="tarjeta-titulo"><h2>Turnos del {{ dia|date:"l j \d\e F" }}</h2><span class="etiqueta violeta">{{ turnos|length }} turno{{ turnos|length|pluralize }}</span></div>
+    <div class="tabla-contenedor">
+      <table>
+        <thead><tr><th>Hora</th><th>Mascota</th><th>Dueño</th><th>Motivo</th><th>Acciones</th></tr></thead>
+        <tbody>
+          {% for t in turnos %}
+          <tr>
+            <td><span class="etiqueta violeta">{{ t.hora|time:"H:i" }}</span></td>
+            <td><a href="{% url 'ficha' t.mascota.pk %}" class="mascota-celda">{% include 'veterinaria/_huella.html' %}{{ t.mascota }}</a></td>
+            <td>{{ t.mascota.dueno }}</td>
+            <td>{{ t.motivo|default:"—" }}</td>
+            <td>
+              {% if t.estado == 'pendiente' %}
+              <div class="acciones">
+                <a href="{% url 'recordar_turno' t.pk %}" target="_blank" class="boton whatsapp chico">Avisar</a>
+                <form method="post" action="{% url 'atender_turno' t.pk %}">{% csrf_token %}<button class="boton chico">Atender</button></form>
+                <form method="post" action="{% url 'cancelar_turno' t.pk %}" onsubmit="return confirm('¿Cancelar el turno de {{ t.mascota }}?')">{% csrf_token %}<button class="boton peligro chico">Cancelar</button></form>
+              </div>
+              {% else %}<span class="etiqueta activo">Atendido</span>{% endif %}
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="5" class="vacio">No hay turnos este día.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<form method="post" class="tarjeta formulario" id="nuevo">
+  {% csrf_token %}
+  <h2>Nuevo turno</h2>
+  {% include 'veterinaria/_campo.html' with campo=form.mascota %}
+  {% include 'veterinaria/_campo.html' with campo=form.motivo %}
+  {% include 'veterinaria/_campo.html' with campo=form.fecha %}
+  {% include 'veterinaria/_campo.html' with campo=form.hora %}
+  {% for e in form.non_field_errors %}<small class="error completo">{{ e }}</small>{% endfor %}
+  <div class="acciones-form">
+    <div class="check">{{ form.enviar_recordatorio }}<label for="{{ form.enviar_recordatorio.id_for_label }}" style="margin:0">{{ form.enviar_recordatorio.label }}</label></div>
+    <div><button class="boton" type="submit">Guardar turno</button></div>
+  </div>
+</form>
+{% endblock %}
+
+{% block scripts %}
+{% if avisar %}
+<script>
+  // Turno recién guardado con "Enviar recordatorio": abre WhatsApp en otra pestaña
+  window.open("{% url 'recordar_turno' avisar %}", "_blank");
+</script>
+{% endif %}
+{% endblock %}

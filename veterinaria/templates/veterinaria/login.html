@@ -1,0 +1,32 @@
+{% load static %}<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iniciar sesión · Huellitas</title>
+  <link rel="icon" href="{% static 'veterinaria/img/huella.png' %}">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'veterinaria/css/estilos.css' %}">
+</head>
+<body>
+  <div class="login">
+    <div class="tarjeta">
+      <img src="{% static 'veterinaria/img/logo_vertical.png' %}" alt="Huellitas" class="logo">
+      <form method="post">
+        {% csrf_token %}
+        <div>
+          <label for="id_username">Usuario</label>
+          <input id="id_username" name="username" type="text" placeholder="Ingresá tu usuario" value="{{ form.username.value|default:'' }}" autofocus required>
+        </div>
+        <div>
+          <label for="id_password">Contraseña</label>
+          <input id="id_password" name="password" type="password" placeholder="••••••••" required>
+        </div>
+        {% if form.errors %}<div class="alerta">Usuario o contraseña incorrectos.</div>{% endif %}
+        <input type="hidden" name="next" value="{{ next }}">
+        <button class="boton" type="submit">Ingresar</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

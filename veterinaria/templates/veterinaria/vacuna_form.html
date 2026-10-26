@@ -1,0 +1,18 @@
+{% extends 'veterinaria/base.html' %}
+{% block titulo %}Registrar vacuna{% endblock %}
+{% block encabezado %}Registrar vacuna{% endblock %}
+{% block migas %}<a href="{% url 'mascotas' %}">Mascotas</a> &nbsp;›&nbsp; <a href="{% url 'ficha' mascota.pk %}">{{ mascota }}</a> &nbsp;›&nbsp; Registrar vacuna{% endblock %}
+
+{% block contenido %}
+{% include 'veterinaria/_resumen.html' %}
+<form method="post" class="tarjeta formulario">
+  {% csrf_token %}
+  {% include 'veterinaria/_campo.html' with campo=form.vacuna clase='completo' %}
+  {% include 'veterinaria/_campo.html' with campo=form.fecha_aplicacion %}
+  {% include 'veterinaria/_campo.html' with campo=form.proxima_dosis %}
+  <div class="acciones-form">
+    <span class="nota">Con la próxima dosis, la vacuna aparece en Inicio una semana antes para avisar al dueño.</span>
+    <div><a href="{% url 'ficha' mascota.pk %}" class="boton secundario">Cancelar</a><button class="boton" type="submit">Guardar vacuna</button></div>
+  </div>
+</form>
+{% endblock %}

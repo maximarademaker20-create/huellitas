@@ -1,0 +1,20 @@
+{% extends 'veterinaria/base.html' %}
+{% block titulo %}Nueva consulta{% endblock %}
+{% block encabezado %}Nueva consulta{% endblock %}
+{% block migas %}<a href="{% url 'mascotas' %}">Mascotas</a> &nbsp;›&nbsp; <a href="{% url 'ficha' mascota.pk %}">{{ mascota }}</a> &nbsp;›&nbsp; Nueva consulta{% endblock %}
+
+{% block contenido %}
+{% include 'veterinaria/_resumen.html' %}
+<form method="post" class="tarjeta formulario">
+  {% csrf_token %}
+  {% include 'veterinaria/_campo.html' with campo=form.fecha %}
+  {% include 'veterinaria/_campo.html' with campo=form.peso %}
+  {% include 'veterinaria/_campo.html' with campo=form.motivo clase='completo' %}
+  {% include 'veterinaria/_campo.html' with campo=form.diagnostico clase='completo' %}
+  {% include 'veterinaria/_campo.html' with campo=form.tratamiento clase='completo' %}
+  <div class="acciones-form">
+    <span class="nota"><span class="req">*</span> Campos obligatorios</span>
+    <div><a href="{% url 'ficha' mascota.pk %}" class="boton secundario">Cancelar</a><button class="boton" type="submit">Guardar consulta</button></div>
+  </div>
+</form>
+{% endblock %}
