@@ -4,7 +4,6 @@ Uso:  python manage.py datos_prueba
 """
 from datetime import date, time, timedelta
 
-from django.contrib.auth.models import Group, User
 from django.core.management.base import BaseCommand
 
 from veterinaria.models import (Consulta, Dueno, Especie, Mascota, Raza, Turno,
@@ -89,7 +88,5 @@ class Command(BaseCommand):
             Turno.objects.create(mascota=m[mascota], fecha=hoy + timedelta(days=dias), hora=hora, motivo=motivo)
 
         # Grupos (roles) para los usuarios del sistema
-        for g in ['Recepción', 'Veterinario/a']:
-            Group.objects.get_or_create(name=g)
 
         self.stdout.write(self.style.SUCCESS('Datos de prueba cargados. ¡Listo para usar Huellitas!'))

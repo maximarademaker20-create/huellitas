@@ -47,7 +47,7 @@
         <div class="usuario">
           <div class="avatar">{{ user.first_name|default:user.username|slice:":1"|upper }}{{ user.last_name|slice:":1"|upper }}</div>
           <div>{{ user.get_full_name|default:user.username }}
-            <small>{% if user.groups.first %}{{ user.groups.first.name }}{% elif user.is_superuser %}Administración{% else %}Personal{% endif %}</small>
+            <small>{% if user.perfil %}{{ user.perfil.get_rol_display }}{% elif user.is_superuser %}Administración{% else %}Personal{% endif %}</small>
           </div>
         </div>
       </header>

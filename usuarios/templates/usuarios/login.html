@@ -1,0 +1,20 @@
+{% extends 'usuarios/base_acceso.html' %}
+{% block titulo %}Iniciar sesión{% endblock %}
+
+{% block formulario %}
+<form method="post" action="{% url 'login' %}">
+  {% csrf_token %}
+  <div>
+    <label for="id_username">Usuario</label>
+    <input id="id_username" name="username" type="text" placeholder="Ingresá tu usuario" value="{{ form.username.value|default:'' }}" autofocus required>
+  </div>
+  <div>
+    <label for="id_password">Contraseña</label>
+    <input id="id_password" name="password" type="password" placeholder="••••••••" required>
+  </div>
+  {% if form.errors %}<div class="alerta">Usuario o contraseña incorrectos.</div>{% endif %}
+  <input type="hidden" name="next" value="{{ next }}">
+  <button class="boton" type="submit">Ingresar</button>
+  <p class="olvido">¿No tenés cuenta? <a href="{% url 'registrar' %}">Registrate</a></p>
+</form>
+{% endblock %}

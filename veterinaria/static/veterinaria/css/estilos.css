@@ -263,3 +263,8 @@ dialog.tarjeta { margin: auto; max-width: 440px; width: calc(100% - 32px); borde
 dialog::backdrop { background: rgba(31, 21, 53, .45); }
 dialog .acciones-form div { display: flex; gap: 10px; }
 .check input[type=checkbox] { width: 20px; height: 20px; accent-color: var(--violeta); }
+.login .tarjeta { max-width: 460px; }
+.titulo-acceso { text-align: center; color: var(--violeta); }
+.dos-campos { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.exito { padding: 12px 14px; border-radius: 10px; background: var(--aqua-suave); color: var(--aqua-texto); font-size: 13px; font-weight: 700; margin-bottom: 16px; }
+@media (max-width: 480px) { .dos-campos { grid-template-columns: 1fr; } .login .tarjeta { padding: 24px; } }
