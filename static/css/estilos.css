@@ -194,7 +194,9 @@ td .acciones { display: flex; gap: 8px; }
 .resumen-paciente img { width: 36px; }
 .resumen-paciente span { color: var(--texto-suave); }
 
-.turnos-grilla { display: grid; grid-template-columns: 330px 1fr; gap: 18px; margin-bottom: 18px; }
+.turnos-grilla { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 18px; margin-bottom: 18px; }
+.turnos-grilla > *, .dos-columnas > * { min-width: 0; }
+.turnos-grilla td .acciones { flex-wrap: wrap; }
 .calendario-cab { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; font-weight: 800; }
 .calendario-cab a { width: 30px; height: 30px; border-radius: 8px; display: grid; place-items: center; background: var(--fondo); font-weight: 800; }
 .calendario { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; }
@@ -211,15 +213,53 @@ td .acciones { display: flex; gap: 8px; }
 .aviso.visible { opacity: 1; transform: none; }
 .aviso b { color: var(--aqua); }
 
-@media (max-width: 900px) {
-  .app { grid-template-columns: 1fr; }
-  .lateral { position: static; height: auto; flex-direction: row; flex-wrap: wrap; }
-  .lateral .logo { width: 160px; margin-bottom: 8px; flex-basis: 100%; }
+@media (max-width: 1100px) {
+  .app { grid-template-columns: minmax(0, 1fr); }
+  .lateral {
+    position: sticky; top: 0; z-index: 5; height: auto;
+    flex-direction: row; align-items: center; overflow-x: auto;
+    padding: 10px 12px; border-right: none; border-bottom: 1px solid var(--linea);
+    scrollbar-width: none;
+  }
+  .lateral::-webkit-scrollbar { display: none; }
+  .lateral .logo { flex: 0 0 110px; margin: 0 6px 0 0; }
+  .lateral a, .lateral .salir button { padding: 8px 12px; white-space: nowrap; }
   .lateral .salir { margin-top: 0; }
   .principal { padding: 0 16px 32px; }
-  .indicadores, .dos-columnas, .turnos-grilla, .formulario { grid-template-columns: 1fr; }
+  .barra-superior { flex-wrap: wrap; gap: 12px; padding: 18px 0 10px; }
+  .indicadores, .dos-columnas, .turnos-grilla, .formulario { grid-template-columns: minmax(0, 1fr); }
   .ficha-cabecera, .pestanas-fila, .fila-busqueda, .filtros { flex-direction: column; align-items: stretch; }
   .filtros select { width: 100%; }
+  .dueno-caja { min-width: 0; }
+  .pestanas { overflow-x: auto; }
+  .pestanas-fila .botones { flex-wrap: wrap; }
+  .pestanas-fila .botones .boton { flex: 1 1 auto; }
+}
+
+@media (max-width: 800px) {
+  .tabla-contenedor thead { display: none; }
+  .tabla-contenedor tr { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 12px; padding: 14px 0; border-bottom: 1px solid var(--linea); }
+  .tabla-contenedor td:first-child, .tabla-contenedor td:last-child { grid-column: 1 / -1; }
+  .tabla-contenedor tr:last-child { border-bottom: none; }
+  .tabla-contenedor td { display: block; padding: 0; border: none; color: var(--texto-suave); font-size: 14px; }
+  .tabla-contenedor td:first-child { color: var(--texto); font-size: 15px; }
+  .tabla-contenedor td.vacio { padding: 14px 0; }
+}
+
+@media (max-width: 600px) {
+  h1 { font-size: 22px; }
+  .tarjeta { padding: 16px; }
+  .usuario > div:last-child { display: none; }
+  .datos-grilla { grid-template-columns: repeat(2, auto); }
+  .acciones-form { flex-direction: column; align-items: stretch; }
+  .acciones-form div { flex-wrap: wrap; }
+  .acciones-form .boton { flex: 1 1 auto; }
+  .fila-campo { flex-direction: column; align-items: stretch; }
+  .evento .tarjeta { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .evento .fecha { min-width: 0; }
+  .lista-item { flex-wrap: wrap; }
+  td .acciones { flex-wrap: wrap; }
+  .avisos { left: 16px; right: 16px; bottom: 16px; }
 }
 
 a.tarjeta { color: inherit; }

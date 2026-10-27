@@ -61,6 +61,12 @@
     </div>
     <script>setTimeout(() => document.querySelectorAll('.aviso').forEach(a => a.classList.remove('visible')), 3500);</script>
   {% endif %}
+  <script>
+    const menuActivo = document.querySelector('.lateral a.activo');
+    if (menuActivo && window.innerWidth <= 1100) {
+      menuActivo.scrollIntoView({ inline: 'center', block: 'nearest' });
+    }
+  </script>
   {% block scripts %}{% endblock %}
 </body>
 </html>
