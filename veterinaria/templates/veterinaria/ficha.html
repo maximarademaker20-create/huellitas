@@ -6,7 +6,7 @@
 
 {% block contenido %}
 <section class="tarjeta ficha-cabecera">
-  <div class="foto-mascota"><img src="{% static 'veterinaria/img/huella.png' %}" alt=""></div>
+  <div class="foto-mascota"><img src="{% static 'img/huella.png' %}" alt=""></div>
   <div class="ficha-datos">
     <h1>{{ mascota }} <span class="etiqueta {{ mascota.estado }}">{{ mascota.get_estado_display }}</span></h1>
     <div class="datos-grilla">
@@ -70,7 +70,6 @@
   {% endfor %}
 </section>
 
-{# Ventana para confirmar la baja #}
 <dialog id="baja" class="tarjeta">
   <form method="post" action="{% url 'dar_baja' mascota.pk %}">
     {% csrf_token %}
@@ -89,7 +88,6 @@
 
 {% block scripts %}
 <script>
-  // Pestañas: muestra todo el historial, solo consultas o solo vacunas
   function filtrar(boton, tipo) {
     document.querySelectorAll('.pestanas button').forEach(b => b.classList.remove('activa'));
     boton.classList.add('activa');

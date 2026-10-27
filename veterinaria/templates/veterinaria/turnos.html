@@ -71,7 +71,6 @@
 {% block scripts %}
 {% if avisar %}
 <script>
-  // Turno recién guardado con "Enviar recordatorio": abre WhatsApp en otra pestaña
   window.open("{% url 'recordar_turno' avisar %}", "_blank");
 </script>
 {% endif %}

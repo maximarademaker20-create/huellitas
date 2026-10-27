@@ -1,8 +1,3 @@
-/* ==========================================================
-   Huellitas — Sistema de gestión de pacientes veterinarios
-   Hoja de estilos del prototipo
-   ========================================================== */
-
 :root {
   --violeta: #5E17EB;
   --violeta-osc: #4A0FC0;
@@ -36,7 +31,6 @@ a { color: var(--violeta); text-decoration: none; }
 h1 { font-size: 26px; font-weight: 800; }
 h2 { font-size: 18px; font-weight: 800; }
 
-/* ---------- Estructura general ---------- */
 .app { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
 
 .lateral {
@@ -76,7 +70,6 @@ h2 { font-size: 18px; font-weight: 800; }
   display: grid; place-items: center; font-weight: 800; color: var(--violeta);
 }
 
-/* ---------- Componentes ---------- */
 .tarjeta {
   background: var(--blanco); border: 1px solid var(--linea);
   border-radius: var(--radio); box-shadow: var(--sombra); padding: 22px;
@@ -125,7 +118,6 @@ label .req { color: var(--violeta); }
 .etiqueta.baja { background: var(--rojo-suave); color: var(--rojo); }
 .etiqueta.violeta { background: var(--violeta-suave); color: var(--violeta); }
 
-/* Tablas */
 .tabla-contenedor { overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; }
 th { text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: var(--texto-suave); padding: 12px 14px; border-bottom: 2px solid var(--linea); }
@@ -144,7 +136,6 @@ td .acciones { display: flex; gap: 8px; }
 .paginacion a { width: 32px; height: 32px; border-radius: 8px; border: 1.5px solid var(--linea); display: grid; place-items: center; color: var(--texto); font-weight: 700; }
 .paginacion a.actual { background: var(--violeta); border-color: var(--violeta); color: var(--blanco); }
 
-/* ---------- Login ---------- */
 .login {
   min-height: 100vh; display: grid; place-items: center; padding: 24px;
   background: radial-gradient(circle at 15% 20%, var(--aqua-suave) 0, transparent 40%),
@@ -157,7 +148,6 @@ td .acciones { display: flex; gap: 8px; }
 .login .olvido { text-align: center; font-size: 13px; }
 .alerta { padding: 12px 14px; border-radius: 10px; background: var(--rojo-suave); color: var(--rojo); font-size: 13px; font-weight: 700; }
 
-/* ---------- Inicio ---------- */
 .fila-busqueda { display: flex; gap: 14px; margin-bottom: 22px; }
 .indicadores { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-bottom: 22px; }
 .indicador { display: flex; align-items: center; gap: 16px; }
@@ -172,7 +162,6 @@ td .acciones { display: flex; gap: 8px; }
 .lista-item .detalle { flex: 1; }
 .lista-item .detalle small { display: block; color: var(--texto-suave); }
 
-/* ---------- Ficha ---------- */
 .ficha-cabecera { display: flex; gap: 24px; align-items: center; }
 .foto-mascota { width: 110px; height: 110px; border-radius: 20px; background: var(--violeta-suave); display: grid; place-items: center; flex-shrink: 0; }
 .foto-mascota img { width: 72px; }
@@ -205,7 +194,6 @@ td .acciones { display: flex; gap: 8px; }
 .resumen-paciente img { width: 36px; }
 .resumen-paciente span { color: var(--texto-suave); }
 
-/* ---------- Turnos ---------- */
 .turnos-grilla { display: grid; grid-template-columns: 330px 1fr; gap: 18px; margin-bottom: 18px; }
 .calendario-cab { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; font-weight: 800; }
 .calendario-cab a { width: 30px; height: 30px; border-radius: 8px; display: grid; place-items: center; background: var(--fondo); font-weight: 800; }
@@ -219,12 +207,10 @@ td .acciones { display: flex; gap: 8px; }
 .check { display: flex; align-items: center; gap: 10px; font-weight: 700; }
 .check input { width: 20px; height: 20px; accent-color: var(--violeta); }
 
-/* Mensaje de confirmación */
 .aviso { position: fixed; right: 24px; bottom: 24px; background: var(--texto); color: var(--blanco); padding: 14px 20px; border-radius: 12px; font-weight: 700; box-shadow: 0 10px 30px rgba(0,0,0,.2); opacity: 0; transform: translateY(10px); transition: .25s; pointer-events: none; }
 .aviso.visible { opacity: 1; transform: none; }
 .aviso b { color: var(--aqua); }
 
-/* ---------- Pantallas chicas ---------- */
 @media (max-width: 900px) {
   .app { grid-template-columns: 1fr; }
   .lateral { position: static; height: auto; flex-direction: row; flex-wrap: wrap; }
@@ -236,9 +222,6 @@ td .acciones { display: flex; gap: 8px; }
   .filtros select { width: 100%; }
 }
 
-/* ==========================================================
-   Agregados para la versión Django
-   ========================================================== */
 a.tarjeta { color: inherit; }
 a.tarjeta:hover { border-color: var(--violeta-borde); }
 .lateral .salir button {

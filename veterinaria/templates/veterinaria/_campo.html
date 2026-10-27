@@ -1,4 +1,3 @@
-{# Dibuja un campo de formulario con su etiqueta, el * si es obligatorio y los errores #}
 <div class="{{ clase }}">
   <label for="{{ campo.id_for_label }}">{{ campo.label|capfirst }}{% if campo.field.required %} <span class="req">*</span>{% endif %}</label>
   {{ campo }}

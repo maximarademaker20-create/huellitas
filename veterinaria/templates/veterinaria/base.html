@@ -4,17 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block titulo %}Inicio{% endblock %} · Huellitas</title>
-  <link rel="icon" href="{% static 'veterinaria/img/huella.png' %}">
+  <link rel="icon" href="{% static 'img/huella.png' %}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{% static 'veterinaria/css/estilos.css' %}">
+  <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
 </head>
 <body>
   {% with seccion=request.resolver_match.url_name %}
   <div class="app">
-    {# ---------- Menú lateral (igual en todas las páginas) ---------- #}
     <nav class="lateral">
-      <a href="{% url 'inicio' %}" class="logo"><img src="{% static 'veterinaria/img/logo_horizontal.png' %}" alt="Huellitas"></a>
+      <a href="{% url 'inicio' %}" class="logo"><img src="{% static 'img/logo_horizontal.png' %}" alt="Huellitas"></a>
 
       <a href="{% url 'inicio' %}" {% if seccion == 'inicio' %}class="activo"{% endif %}>
         <svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg> Inicio</a>
@@ -38,7 +37,6 @@
     </nav>
 
     <main class="principal">
-      {# ---------- Barra superior ---------- #}
       <header class="barra-superior">
         <div>
           <h1>{% block encabezado %}{% endblock %}</h1>
@@ -57,7 +55,6 @@
   </div>
   {% endwith %}
 
-  {# Mensajes de confirmación (abajo a la derecha) #}
   {% if messages %}
     <div class="avisos">
       {% for m in messages %}<div class="aviso visible {{ m.tags }}">{{ m }}</div>{% endfor %}

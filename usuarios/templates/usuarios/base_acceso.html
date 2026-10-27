@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block titulo %}{% endblock %} · Huellitas</title>
-  <link rel="icon" href="{% static 'veterinaria/img/huella.png' %}">
+  <link rel="icon" href="{% static 'img/huella.png' %}">
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{% static 'veterinaria/css/estilos.css' %}">
+  <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
 </head>
 <body>
   <div class="login">
     <div class="tarjeta">
-      <img src="{% static 'veterinaria/img/logo_vertical.png' %}" alt="Huellitas" class="logo">
+      <img src="{% static 'img/logo_vertical.png' %}" alt="Huellitas" class="logo">
       {% for m in messages %}<div class="exito">{{ m }}</div>{% endfor %}
       {% block formulario %}{% endblock %}
     </div>
