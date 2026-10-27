@@ -3,9 +3,6 @@ from datetime import date
 from django.db import models
 
 
-# ---------------------------------------------------------------------
-# Especies y razas
-# ---------------------------------------------------------------------
 class Especie(models.Model):
     id = models.AutoField(primary_key=True, db_column='id_especie')
     nombre = models.CharField(max_length=50, unique=True)
@@ -34,9 +31,6 @@ class Raza(models.Model):
         return f'{self.nombre} ({self.especie})'
 
 
-# ---------------------------------------------------------------------
-# Dueños y mascotas
-# ---------------------------------------------------------------------
 class Dueno(models.Model):
     id = models.AutoField(primary_key=True, db_column='id_dueno')
     nombre = models.CharField(max_length=60)
@@ -110,9 +104,6 @@ class Mascota(models.Model):
         return hoy.year - n.year - ((hoy.month, hoy.day) < (n.month, n.day))
 
 
-# ---------------------------------------------------------------------
-# Consultas y vacunas
-# ---------------------------------------------------------------------
 class Consulta(models.Model):
     id = models.AutoField(primary_key=True, db_column='id_consulta')
     mascota = models.ForeignKey(Mascota, on_delete=models.PROTECT, related_name='consultas', db_column='id_mascota')
@@ -160,9 +151,6 @@ class VacunaAplicada(models.Model):
         return f'{self.mascota} - {self.vacuna} ({self.fecha_aplicacion:%d/%m/%Y})'
 
 
-# ---------------------------------------------------------------------
-# Turnos y recordatorios por WhatsApp
-# ---------------------------------------------------------------------
 class Turno(models.Model):
     ESTADO = [('pendiente', 'Pendiente'), ('atendido', 'Atendido'), ('cancelado', 'Cancelado')]
 

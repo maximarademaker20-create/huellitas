@@ -1,7 +1,3 @@
-"""Carga datos de ejemplo para probar el sistema.
-
-Uso:  python manage.py datos_prueba
-"""
 from datetime import date, time, timedelta
 
 from django.core.management.base import BaseCommand
@@ -20,7 +16,6 @@ class Command(BaseCommand):
 
         hoy = date.today()
 
-        # Especies y razas
         razas = {}
         for especie, lista in {'Perro': ['Caniche', 'Labrador', 'Beagle', 'Mestizo', 'Golden retriever'],
                                'Gato': ['Siamés', 'Persa', 'Común europeo'],
@@ -29,7 +24,6 @@ class Command(BaseCommand):
             for r in lista:
                 razas[r] = Raza.objects.create(nombre=r, especie=e)
 
-        # Vacunas
         vac = {n: Vacuna.objects.create(nombre=n, descripcion=d) for n, d in [
             ('Antirrábica', 'Anual, obligatoria'),
             ('Séxtuple', 'Perros: moquillo, parvovirus, hepatitis y otras'),
@@ -37,7 +31,6 @@ class Command(BaseCommand):
             ('Tos de las perreras', 'Perros, anual'),
         ]}
 
-        # Dueños
         d = {}
         for nombre, apellido, dni, tel in [('Laura', 'Gómez', '30456789', '3415551234'),
                                            ('Juan', 'Pérez', '28123456', '3415552345'),
@@ -47,7 +40,6 @@ class Command(BaseCommand):
                                            ('Pedro', 'Sosa', '37333444', '3415556789')]:
             d[nombre] = Dueno.objects.create(nombre=nombre, apellido=apellido, dni=dni, telefono=tel)
 
-        # Mascotas
         m = {}
         for nombre, sexo, nac, raza, dueno, color in [
                 ('Luna', 'H', date(2021, 3, 12), 'Caniche', 'Laura', 'Blanca'),
@@ -62,7 +54,6 @@ class Command(BaseCommand):
                                dueno=d['Laura'], color='Tricolor', estado='baja', fecha_alta=date(2017, 4, 11),
                                fecha_baja=hoy - timedelta(days=130), motivo_baja='Mudanza')
 
-        # Historial de Luna y otras consultas
         for mascota, dias, peso, motivo, diag, trat in [
                 ('Luna', 250, 6.1, 'Vómitos', 'Gastroenteritis leve', 'Dieta blanda 3 días'),
                 ('Luna', 120, 6.2, 'Control anual', 'Sin novedades', ''),
@@ -72,7 +63,6 @@ class Command(BaseCommand):
             Consulta.objects.create(mascota=m[mascota], fecha=hoy - timedelta(days=dias), peso=peso,
                                     motivo=motivo, diagnostico=diag, tratamiento=trat)
 
-        # Vacunas (tres vencen esta semana, para que aparezcan en Inicio)
         for mascota, vacuna, hace, proxima in [('Luna', 'Séxtuple', 205, 160), ('Luna', 'Antirrábica', 47, 318),
                                                ('Rocky', 'Antirrábica', 364, 1), ('Kira', 'Séxtuple', 362, 3),
                                                ('Simba', 'Triple felina', 360, 5)]:
@@ -80,13 +70,10 @@ class Command(BaseCommand):
                                           fecha_aplicacion=hoy - timedelta(days=hace),
                                           proxima_dosis=hoy + timedelta(days=proxima))
 
-        # Turnos de hoy y de los próximos días
         for mascota, dias, hora, motivo in [('Luna', 0, time(9, 0), 'Control'), ('Rocky', 0, time(10, 30), 'Vacuna antirrábica'),
                                             ('Michi', 0, time(11, 15), 'Consulta'), ('Kira', 0, time(15, 0), 'Control'),
                                             ('Nala', 1, time(16, 30), 'Consulta'), ('Simba', 5, time(9, 30), 'Vacuna'),
                                             ('Luna', 7, time(10, 0), 'Control otitis')]:
             Turno.objects.create(mascota=m[mascota], fecha=hoy + timedelta(days=dias), hora=hora, motivo=motivo)
-
-        # Grupos (roles) para los usuarios del sistema
 
         self.stdout.write(self.style.SUCCESS('Datos de prueba cargados. ¡Listo para usar Huellitas!'))

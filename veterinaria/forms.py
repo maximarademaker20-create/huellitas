@@ -5,7 +5,6 @@ from .models import Consulta, Dueno, Especie, Mascota, Raza, Turno, VacunaAplica
 
 
 class FechaInput(forms.DateInput):
-    """Campo de fecha con calendario del navegador."""
     input_type = 'date'
 
     def __init__(self, **kwargs):
@@ -86,7 +85,6 @@ class TurnoForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Solo se pueden dar turnos a mascotas activas
         self.fields['mascota'].queryset = Mascota.objects.filter(estado='activo').select_related('dueno')
         self.fields['mascota'].label_from_instance = lambda m: f'{m.nombre} — {m.dueno}'
 

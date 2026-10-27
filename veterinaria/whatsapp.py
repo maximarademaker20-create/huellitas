@@ -1,16 +1,7 @@
-"""Arma los enlaces de WhatsApp (wa.me) con el mensaje ya escrito.
-
-No hace falta ninguna cuenta ni servicio pago: el enlace abre WhatsApp
-(web o en el celular) con el chat del dueño y el mensaje listo para enviar.
-"""
 from urllib.parse import quote
 
 
 def numero_internacional(telefono):
-    """Convierte un teléfono argentino al formato que pide WhatsApp.
-
-    Ej: '341 555-1234' -> '5493415551234'
-    """
     digitos = ''.join(c for c in telefono if c.isdigit())
     if digitos.startswith('0'):
         digitos = digitos[1:]
