@@ -5,10 +5,10 @@
 
 {% block contenido %}
 <div class="tarjeta">
-  <form class="filtros">
+  <form class="filtros" action="{% url 'mascotas' %}" method="get">
     <div class="buscador">
       <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-      <input type="search" name="q" value="{{ buscar }}" placeholder="Buscar por mascota, dueño o DNI...">
+      <input type="search" name="buscar" value="{{ buscar }}" placeholder="Buscar por mascota, dueño o DNI...">
     </div>
     <select name="especie" onchange="this.form.submit()">
       <option value="">Todas las especies</option>

@@ -4,10 +4,10 @@
 {% block migas %}Resumen del día · {{ hoy|date:"l j \d\e F" }}{% endblock %}
 
 {% block contenido %}
-<form class="fila-busqueda" action="{% url 'mascotas' %}">
+<form class="fila-busqueda" action="{% url 'mascotas' %}" method="get">
   <div class="buscador">
     <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-    <input type="search" name="q" placeholder="Buscar paciente por nombre de mascota, dueño o DNI...">
+    <input type="search" name="buscar" placeholder="Buscar paciente por nombre de mascota, dueño o DNI...">
   </div>
   <a href="{% url 'nueva_mascota' %}" class="boton">+ Nueva mascota</a>
 </form>

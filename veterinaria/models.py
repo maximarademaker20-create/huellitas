@@ -79,6 +79,24 @@ class Mascota(models.Model):
     def __str__(self):
         return self.nombre
 
+    def dar_de_baja(self, motivo):
+        self.estado = 'baja'
+        self.fecha_baja = date.today()
+        self.motivo_baja = motivo
+        self.save()
+
+    def reactivar(self):
+        self.estado = 'activo'
+        self.fecha_baja = None
+        self.motivo_baja = ''
+        self.save()
+
+    def historial(self):
+        eventos = [{'tipo': 'consulta', 'fecha': c.fecha, 'obj': c} for c in self.consultas.all()]
+        eventos += [{'tipo': 'vacuna', 'fecha': v.fecha_aplicacion, 'obj': v}
+                    for v in self.vacunas.select_related('vacuna')]
+        return sorted(eventos, key=lambda e: e['fecha'], reverse=True)
+
     @property
     def especie(self):
         return self.raza.especie
