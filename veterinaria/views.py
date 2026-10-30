@@ -13,6 +13,8 @@ from django.views.decorators.http import require_POST
 from . import whatsapp
 from .forms import (BajaForm, ConsultaForm, DuenoForm, EspecieForm, MascotaForm,
                     RazaForm, TurnoForm, VacunaAplicadaForm)
+from usuarios.models import Perfil
+
 from .models import Dueno, Especie, Mascota, Recordatorio, Turno, VacunaAplicada
 
 
@@ -29,6 +31,7 @@ def inicio(request):
         "pacientes_activos": Mascota.objects.filter(estado="activo").count(),
         "turnos_hoy": turnos_hoy,
         "vacunas_proximas": vacunas_proximas,
+        "veterinarios": veterinarios_con_telefono(),
     }
     return render(request, "veterinaria/inicio.html", datos)
 
@@ -216,6 +219,7 @@ def turnos(request):
         "mes_siguiente": (dia.replace(day=28) + timedelta(days=4)).replace(day=1),
         "turnos": turnos_del_dia,
         "avisar": avisar,
+        "veterinarios": veterinarios_con_telefono(),
     }
     return render(request, "veterinaria/turnos.html", datos)
 
@@ -237,6 +241,41 @@ def atender_turno(request, pk):
     turno.estado = "atendido"
     turno.save()
     return redirect("nueva_consulta", pk=turno.mascota_id)
+
+
+def veterinarios_con_telefono():
+    return (Perfil.objects.filter(rol="veterinario")
+            .exclude(telefono="")
+            .select_related("usuario"))
+
+
+@login_required
+def agenda_dia(request):
+    fecha = request.GET.get("fecha", "")
+    veterinario = request.GET.get("veterinario", "")
+    try:
+        dia = date.fromisoformat(fecha)
+    except ValueError:
+        dia = date.today()
+
+    if not veterinario.isdigit():
+        messages.error(request, "Elegí a qué veterinario/a enviarle la agenda.")
+        return redirect(f"{reverse('turnos')}?fecha={dia:%Y-%m-%d}")
+
+    perfil = get_object_or_404(Perfil, pk=veterinario, rol="veterinario")
+    if perfil.telefono == "":
+        messages.error(request, f"{perfil.usuario.get_full_name() or perfil.usuario.username} no tiene teléfono cargado.")
+        return redirect(f"{reverse('turnos')}?fecha={dia:%Y-%m-%d}")
+
+    turnos_del_dia = list(Turno.objects.filter(fecha=dia, estado="pendiente")
+                          .select_related("mascota__raza", "mascota__dueno")
+                          .order_by("hora"))
+
+    Recordatorio.objects.create(tipo="agenda", fecha_envio=timezone.now(), estado="enviado")
+    print(f">>> Agenda del {dia:%d/%m/%Y} enviada a {perfil.usuario.get_full_name() or perfil.usuario.username}"
+          f" ({len(turnos_del_dia)} turnos)")
+
+    return redirect(whatsapp.enlace(perfil.telefono, whatsapp.mensaje_agenda(dia, turnos_del_dia)))
 
 
 @login_required

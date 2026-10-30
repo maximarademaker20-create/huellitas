@@ -19,6 +19,7 @@ urlpatterns = [
     path('duenos/<int:pk>/editar/', views.dueno_form, name='editar_dueno'),
 
     path('turnos/', views.turnos, name='turnos'),
+    path('turnos/agenda/', views.agenda_dia, name='agenda_dia'),
     path('turnos/<int:pk>/cancelar/', views.cancelar_turno, name='cancelar_turno'),
     path('turnos/<int:pk>/atender/', views.atender_turno, name='atender_turno'),
     path('turnos/<int:pk>/whatsapp/', views.recordar_turno, name='recordar_turno'),

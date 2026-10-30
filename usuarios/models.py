@@ -8,6 +8,8 @@ class Perfil(models.Model):
     id = models.AutoField(primary_key=True, db_column='id_perfil')
     usuario = models.OneToOneField(User, on_delete=models.CASCADE, related_name='perfil', db_column='id_usuario')
     rol = models.CharField(max_length=15, choices=ROLES, default='recepcion')
+    telefono = models.CharField('teléfono', max_length=20, blank=True,
+                                help_text='Se usa para enviarle la agenda del día por WhatsApp')
 
     class Meta:
         db_table = 'perfil'

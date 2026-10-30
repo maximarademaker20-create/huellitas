@@ -1,0 +1,14 @@
+<form class="agenda-envio" action="{% url 'agenda_dia' %}" method="get" target="_blank">
+  <input type="hidden" name="fecha" value="{{ dia|date:'Y-m-d' }}">
+  <svg viewBox="0 0 24 24" class="icono-wa"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.5 8.5 0 0 1-3.8-.9L3 20.5l1.6-4.9A8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5z"/><path d="M8.5 9.3c.2-.5.4-.5.6-.5h.5c.2 0 .4 0 .6.5l.7 1.6c.1.2 0 .4-.1.5l-.4.5c-.1.2-.2.3 0 .6a6 6 0 0 0 2.6 2.3c.3.1.5.1.6 0l.6-.7c.2-.2.3-.2.5-.1l1.6.8c.2.1.4.2.4.3v.6c-.1.5-.7 1.1-1.3 1.2-.5.1-1.1.2-3.1-.7a8.4 8.4 0 0 1-3.6-3.4c-.3-.5-.8-1.5-.8-2.4 0-.9.4-1.3.6-1.5z"/></svg>
+  {% if veterinarios|length > 1 %}
+    <select name="veterinario" required>
+      <option value="">Elegí al veterinario/a</option>
+      {% for v in veterinarios %}<option value="{{ v.pk }}">{{ v.usuario.get_full_name|default:v.usuario.username }}</option>{% endfor %}
+    </select>
+  {% else %}
+    {% for v in veterinarios %}<input type="hidden" name="veterinario" value="{{ v.pk }}">
+      <span class="agenda-texto">Enviar la agenda del día a <b>{{ v.usuario.get_full_name|default:v.usuario.username }}</b></span>{% endfor %}
+  {% endif %}
+  <button class="boton whatsapp" type="submit">Enviar agenda</button>
+</form>

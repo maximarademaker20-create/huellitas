@@ -30,6 +30,7 @@
 <section class="dos-columnas">
   <div class="tarjeta">
     <div class="tarjeta-titulo"><h2>Turnos de hoy</h2><a href="{% url 'turnos' %}">Ver agenda ›</a></div>
+    {% if veterinarios %}{% include 'veterinaria/_agenda.html' with dia=hoy %}{% endif %}
     {% for t in turnos_hoy %}
       <div class="lista-item">
         <span class="hora">{{ t.hora|time:"H:i" }}</span>

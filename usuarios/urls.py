@@ -8,4 +8,7 @@ urlpatterns = [
                                                 redirect_authenticated_user=True), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('registrar/', views.registrar, name='registrar'),
+
+    path('personal/', views.personal, name='personal'),
+    path('personal/<int:pk>/editar/', views.perfil_form, name='editar_perfil'),
 ]

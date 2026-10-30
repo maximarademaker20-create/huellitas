@@ -213,6 +213,16 @@ td .acciones { display: flex; gap: 8px; }
 .aviso.visible { opacity: 1; transform: none; }
 .aviso b { color: var(--aqua); }
 
+.agenda-envio {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--aqua-suave); border: 1px solid var(--aqua);
+  border-radius: 12px; padding: 12px 16px; margin-bottom: 18px;
+}
+.agenda-envio .icono-wa { width: 24px; height: 24px; stroke: var(--aqua-texto); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+.agenda-envio .agenda-texto { flex: 1; color: var(--aqua-texto); font-weight: 700; font-size: 14px; }
+.agenda-envio select { flex: 1; background: var(--blanco); }
+.agenda-envio .boton { white-space: nowrap; }
+
 @media (max-width: 1100px) {
   .app { grid-template-columns: minmax(0, 1fr); }
   .lateral {
@@ -254,6 +264,9 @@ td .acciones { display: flex; gap: 8px; }
   .acciones-form { flex-direction: column; align-items: stretch; }
   .acciones-form div { flex-wrap: wrap; }
   .acciones-form .boton { flex: 1 1 auto; }
+  .agenda-envio { flex-wrap: wrap; }
+  .agenda-envio .agenda-texto, .agenda-envio select { flex: 1 1 100%; width: auto; min-width: 0; }
+  .agenda-envio .boton { flex: 1 1 auto; }
   .fila-campo { flex-direction: column; align-items: stretch; }
   .evento .tarjeta { flex-direction: column; align-items: flex-start; gap: 6px; }
   .evento .fecha { min-width: 0; }

@@ -28,3 +28,25 @@ def mensaje_vacuna(vacuna_aplicada):
     return (f'¡Hola {mascota.dueno.nombre}! Te recordamos desde la veterinaria que a {mascota.nombre} '
             f'le corresponde la vacuna {vacuna_aplicada.vacuna.nombre.lower()} el '
             f'{vacuna_aplicada.proxima_dosis:%d/%m/%Y}. Podés pedir turno respondiendo este mensaje. 🐾')
+
+
+def mensaje_agenda(dia, turnos):
+    MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio',
+             'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre']
+    texto = f'AGENDA DEL {dia.day} DE {MESES[dia.month - 1].upper()}\n'
+    texto += 'Veterinaria Huellitas\n\n'
+
+    if not turnos:
+        return texto + 'No hay turnos agendados para este día.'
+
+    for t in turnos:
+        texto += f'{t.hora:%H:%M} - {t.mascota.nombre}'
+        texto += f' ({t.mascota.raza.nombre})'
+        texto += f'\n   Dueño: {t.mascota.dueno} - Tel: {t.mascota.dueno.telefono}'
+        if t.motivo:
+            texto += f'\n   Motivo: {t.motivo}'
+        texto += '\n\n'
+
+    total = len(turnos)
+    texto += f'Total: {total} turno{"s" if total != 1 else ""}. 🐾'
+    return texto

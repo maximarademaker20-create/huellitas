@@ -24,6 +24,7 @@
 
   <div class="tarjeta">
     <div class="tarjeta-titulo"><h2>Turnos del {{ dia|date:"l j \d\e F" }}</h2><span class="etiqueta violeta">{{ turnos|length }} turno{{ turnos|length|pluralize }}</span></div>
+    {% if veterinarios %}{% include 'veterinaria/_agenda.html' %}{% endif %}
     <div class="tabla-contenedor">
       <table>
         <thead><tr><th>Hora</th><th>Mascota</th><th>Dueño</th><th>Motivo</th><th>Acciones</th></tr></thead>

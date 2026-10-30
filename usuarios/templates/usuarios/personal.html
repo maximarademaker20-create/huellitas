@@ -1,0 +1,40 @@
+{% extends 'veterinaria/base.html' %}
+{% block titulo %}Personal{% endblock %}
+{% block encabezado %}Personal{% endblock %}
+{% block migas %}<a href="{% url 'inicio' %}">Inicio</a> &nbsp;›&nbsp; Personal{% endblock %}
+
+{% block contenido %}
+<div class="tarjeta">
+  <form class="filtros" action="{% url 'personal' %}" method="get">
+    <div class="buscador">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input type="search" name="buscar" value="{{ buscar }}" placeholder="Buscar por nombre o usuario...">
+    </div>
+    <a href="{% url 'registrar' %}" class="boton">+ Nueva cuenta</a>
+  </form>
+  <div class="tabla-contenedor">
+    <table>
+      <thead><tr><th>Nombre</th><th>Usuario</th><th>Rol</th><th>Teléfono</th><th>Acciones</th></tr></thead>
+      <tbody>
+        {% for u in usuarios %}
+        <tr>
+          <td><b>{{ u.get_full_name|default:u.username }}</b></td>
+          <td>{{ u.username }}</td>
+          <td>
+            {% if u.perfil %}<span class="etiqueta violeta">{{ u.perfil.get_rol_display }}</span>
+            {% else %}<span class="etiqueta baja">Sin rol</span>{% endif %}
+          </td>
+          <td>{{ u.perfil.telefono|default:"—" }}</td>
+          <td><div class="acciones">
+            <a href="{% url 'editar_perfil' u.pk %}" class="boton secundario chico">Editar</a>
+          </div></td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5" class="vacio">No se encontraron cuentas.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <p class="migas" style="margin-top:14px">El teléfono de los veterinarios se usa para enviarles el informe de turnos del día por WhatsApp.</p>
+</div>
+{% endblock %}

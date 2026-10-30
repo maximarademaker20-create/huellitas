@@ -1,0 +1,15 @@
+{% extends 'veterinaria/base.html' %}
+{% block titulo %}Editar personal{% endblock %}
+{% block encabezado %}{{ usuario.get_full_name|default:usuario.username }}{% endblock %}
+{% block migas %}<a href="{% url 'personal' %}">Personal</a> &nbsp;›&nbsp; Editar{% endblock %}
+
+{% block contenido %}
+<form method="post" class="tarjeta formulario">
+  {% csrf_token %}
+  {% for campo in form %}{% include 'veterinaria/_campo.html' %}{% endfor %}
+  <div class="acciones-form">
+    <span class="nota">El teléfono del veterinario/a se usa para enviarle el informe de turnos por WhatsApp.</span>
+    <div><a href="{% url 'personal' %}" class="boton secundario">Cancelar</a><button class="boton" type="submit">Guardar</button></div>
+  </div>
+</form>
+{% endblock %}
