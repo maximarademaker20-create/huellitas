@@ -22,6 +22,7 @@
     <small>Dueño</small>
     <div><b>{{ mascota.dueno }}</b></div>
     <div>{{ mascota.dueno.telefono }}</div>
+    {% if puede_recepcion %}
     <div class="acciones">
       <a href="{% url 'editar_mascota' mascota.pk %}" class="boton secundario chico">Editar ficha</a>
       {% if mascota.estado == 'activo' %}
@@ -30,6 +31,7 @@
         <form method="post" action="{% url 'reactivar' mascota.pk %}">{% csrf_token %}<button class="boton chico" type="submit">Reactivar</button></form>
       {% endif %}
     </div>
+    {% endif %}
   </div>
 </section>
 
@@ -39,7 +41,7 @@
     <button onclick="filtrar(this, 'consulta')">Consultas</button>
     <button onclick="filtrar(this, 'vacuna')">Vacunas</button>
   </div>
-  {% if mascota.estado == 'activo' %}
+  {% if mascota.estado == 'activo' and puede_historia %}
   <div class="botones">
     <a href="{% url 'nueva_consulta' mascota.pk %}" class="boton">+ Nueva consulta</a>
     <a href="{% url 'registrar_vacuna' mascota.pk %}" class="boton secundario">+ Registrar vacuna</a>
@@ -70,6 +72,7 @@
   {% endfor %}
 </section>
 
+{% if puede_recepcion %}
 <dialog id="baja" class="tarjeta">
   <form method="post" action="{% url 'dar_baja' mascota.pk %}">
     {% csrf_token %}
@@ -84,6 +87,7 @@
     </div>
   </form>
 </dialog>
+{% endif %}
 {% endblock %}
 
 {% block scripts %}

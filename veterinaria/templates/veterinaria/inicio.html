@@ -9,7 +9,7 @@
     <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
     <input type="search" name="buscar" placeholder="Buscar paciente por nombre de mascota, dueño o DNI...">
   </div>
-  <a href="{% url 'nueva_mascota' %}" class="boton">+ Nueva mascota</a>
+  {% if puede_recepcion %}<a href="{% url 'nueva_mascota' %}" class="boton">+ Nueva mascota</a>{% endif %}
 </form>
 
 <section class="indicadores">
@@ -48,7 +48,7 @@
       <div class="lista-item">
         {% include 'veterinaria/_huella.html' %}
         <div class="detalle"><b>{{ v.mascota }} — {{ v.vacuna }}</b><small>Vence el {{ v.proxima_dosis|date:"d/m" }} · Dueño: {{ v.mascota.dueno }}</small></div>
-        <a href="{% url 'recordar_vacuna' v.pk %}" target="_blank" class="boton whatsapp chico">WhatsApp</a>
+        {% if puede_recepcion %}<a href="{% url 'recordar_vacuna' v.pk %}" target="_blank" class="boton whatsapp chico">WhatsApp</a>{% endif %}
       </div>
     {% empty %}
       <p class="vacio">No hay vacunas por vencer esta semana.</p>

@@ -38,9 +38,9 @@
             <td>
               {% if t.estado == 'pendiente' %}
               <div class="acciones">
-                <a href="{% url 'recordar_turno' t.pk %}" target="_blank" class="boton whatsapp chico">Avisar</a>
+                {% if puede_recepcion %}<a href="{% url 'recordar_turno' t.pk %}" target="_blank" class="boton whatsapp chico">Avisar</a>{% endif %}
                 <form method="post" action="{% url 'atender_turno' t.pk %}">{% csrf_token %}<button class="boton chico">Atender</button></form>
-                <form method="post" action="{% url 'cancelar_turno' t.pk %}" onsubmit="return confirm('¿Cancelar el turno de {{ t.mascota }}?')">{% csrf_token %}<button class="boton peligro chico">Cancelar</button></form>
+                {% if puede_recepcion %}<form method="post" action="{% url 'cancelar_turno' t.pk %}" onsubmit="return confirm('¿Cancelar el turno de {{ t.mascota }}?')">{% csrf_token %}<button class="boton peligro chico">Cancelar</button></form>{% endif %}
               </div>
               {% else %}<span class="etiqueta activo">Atendido</span>{% endif %}
             </td>
@@ -54,6 +54,7 @@
   </div>
 </section>
 
+{% if puede_recepcion %}
 <form method="post" class="tarjeta formulario" id="nuevo">
   {% csrf_token %}
   <h2>Nuevo turno</h2>
@@ -67,6 +68,7 @@
     <div><button class="boton" type="submit">Guardar turno</button></div>
   </div>
 </form>
+{% endif %}
 {% endblock %}
 
 {% block scripts %}

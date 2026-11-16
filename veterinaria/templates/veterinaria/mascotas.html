@@ -19,7 +19,7 @@
       <option value="baja" {% if estado == 'baja' %}selected{% endif %}>Dados de baja</option>
       <option value="todos" {% if estado == 'todos' %}selected{% endif %}>Todos</option>
     </select>
-    <a href="{% url 'nueva_mascota' %}" class="boton">+ Nueva mascota</a>
+    {% if puede_recepcion %}<a href="{% url 'nueva_mascota' %}" class="boton">+ Nueva mascota</a>{% endif %}
   </form>
 
   <div class="tabla-contenedor">
@@ -36,7 +36,7 @@
           <td><span class="etiqueta {{ m.estado }}">{{ m.get_estado_display }}</span></td>
           <td><div class="acciones">
             <a href="{% url 'ficha' m.pk %}" class="boton chico">Ver</a>
-            <a href="{% url 'editar_mascota' m.pk %}" class="boton secundario chico">Editar</a>
+            {% if puede_recepcion %}<a href="{% url 'editar_mascota' m.pk %}" class="boton secundario chico">Editar</a>{% endif %}
           </div></td>
         </tr>
         {% empty %}

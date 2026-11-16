@@ -14,6 +14,7 @@ from . import whatsapp
 from .forms import (BajaForm, ConsultaForm, DuenoForm, EspecieForm, MascotaForm,
                     RazaForm, TurnoForm, VacunaAplicadaForm)
 from usuarios.models import Perfil
+from usuarios.permisos import RECEPCION, VETERINARIO, solo_rol, tiene_rol
 
 from .models import Dueno, Especie, Mascota, Recordatorio, Turno, VacunaAplicada
 
@@ -66,6 +67,7 @@ def mascotas(request):
 
 
 @login_required
+@solo_rol(RECEPCION, aviso="Las altas y modificaciones de pacientes, dueños y turnos las hace recepción.")
 def mascota_form(request, pk=None):
     mascota = get_object_or_404(Mascota, pk=pk) if pk else None
     dueno_elegido = request.GET.get("dueno")
@@ -91,6 +93,7 @@ def ficha(request, pk):
 
 
 @login_required
+@solo_rol(RECEPCION, aviso="Las altas y modificaciones de pacientes, dueños y turnos las hace recepción.")
 @require_POST
 def dar_baja(request, pk):
     mascota = get_object_or_404(Mascota, pk=pk)
@@ -102,6 +105,7 @@ def dar_baja(request, pk):
 
 
 @login_required
+@solo_rol(RECEPCION, aviso="Las altas y modificaciones de pacientes, dueños y turnos las hace recepción.")
 @require_POST
 def reactivar(request, pk):
     mascota = get_object_or_404(Mascota, pk=pk)
@@ -111,6 +115,7 @@ def reactivar(request, pk):
 
 
 @login_required
+@solo_rol(VETERINARIO, aviso="La historia clínica solo la puede cargar un veterinario/a.")
 def nueva_consulta(request, pk):
     mascota = get_object_or_404(Mascota, pk=pk)
     if mascota.estado == "baja":
@@ -128,6 +133,7 @@ def nueva_consulta(request, pk):
 
 
 @login_required
+@solo_rol(VETERINARIO, aviso="La historia clínica solo la puede cargar un veterinario/a.")
 def registrar_vacuna(request, pk):
     mascota = get_object_or_404(Mascota, pk=pk)
     if mascota.estado == "baja":
@@ -161,6 +167,7 @@ def duenos(request):
 
 
 @login_required
+@solo_rol(RECEPCION, aviso="Las altas y modificaciones de pacientes, dueños y turnos las hace recepción.")
 def dueno_form(request, pk=None):
     dueno = get_object_or_404(Dueno, pk=pk) if pk else None
     volver = request.GET.get("volver")
@@ -192,7 +199,12 @@ def turnos(request):
     except ValueError:
         dia = date.today()
 
-    form = TurnoForm(request.POST or None, initial={"fecha": dia})
+    puede_agendar = tiene_rol(request.user, [RECEPCION])
+    if request.method == "POST" and not puede_agendar:
+        messages.error(request, "Los turnos los agenda recepción.")
+        return redirect(f"{reverse('turnos')}?fecha={dia:%Y-%m-%d}")
+
+    form = TurnoForm(request.POST or None, initial={"fecha": dia}) if puede_agendar else None
     if request.method == "POST" and form.is_valid():
         try:
             turno = form.save()
@@ -225,6 +237,7 @@ def turnos(request):
 
 
 @login_required
+@solo_rol(RECEPCION, aviso="Las altas y modificaciones de pacientes, dueños y turnos las hace recepción.")
 @require_POST
 def cancelar_turno(request, pk):
     turno = get_object_or_404(Turno, pk=pk)
@@ -279,6 +292,7 @@ def agenda_dia(request):
 
 
 @login_required
+@solo_rol(RECEPCION, aviso="Las altas y modificaciones de pacientes, dueños y turnos las hace recepción.")
 def recordar_turno(request, pk):
     turno = get_object_or_404(Turno.objects.select_related("mascota__dueno"), pk=pk)
     Recordatorio.objects.create(tipo="turno", turno=turno, fecha_envio=timezone.now(), estado="enviado")
@@ -286,6 +300,7 @@ def recordar_turno(request, pk):
 
 
 @login_required
+@solo_rol(RECEPCION, aviso="Las altas y modificaciones de pacientes, dueños y turnos las hace recepción.")
 def recordar_vacuna(request, pk):
     vacuna = get_object_or_404(VacunaAplicada.objects.select_related("mascota__dueno", "vacuna"), pk=pk)
     Recordatorio.objects.create(tipo="vacuna", vacuna_aplicada=vacuna, fecha_envio=timezone.now(), estado="enviado")

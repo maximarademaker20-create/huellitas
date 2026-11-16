@@ -5,11 +5,15 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import PerfilForm
+from .permisos import RECEPCION, solo_rol, tiene_rol
 from .models import Perfil
 
 
 def registrar(request):
     desde_el_sistema = request.user.is_authenticated
+    if desde_el_sistema and not tiene_rol(request.user, [RECEPCION]):
+        messages.error(request, 'La gestión de cuentas del personal la hace recepción.')
+        return redirect('inicio')
 
     if request.method == 'POST':
         nombre = request.POST.get('nombre', '').strip()
@@ -59,6 +63,7 @@ def registrar(request):
 
 
 @login_required
+@solo_rol(RECEPCION, aviso="La gestión de cuentas del personal la hace recepción.")
 def personal(request):
     buscar = request.GET.get("buscar", "")
 
@@ -75,6 +80,7 @@ def personal(request):
 
 
 @login_required
+@solo_rol(RECEPCION, aviso="La gestión de cuentas del personal la hace recepción.")
 def perfil_form(request, pk):
     usuario = get_object_or_404(User, pk=pk)
     perfil, creado = Perfil.objects.get_or_create(usuario=usuario)
