@@ -304,3 +304,18 @@ dialog .acciones-form div { display: flex; gap: 10px; }
 .dos-campos { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .exito { padding: 12px 14px; border-radius: 10px; background: var(--aqua-suave); color: var(--aqua-texto); font-size: 13px; font-weight: 700; margin-bottom: 16px; }
 @media (max-width: 480px) { .dos-campos { grid-template-columns: 1fr; } .login .tarjeta { padding: 24px; } }
+
+.icono-doc { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linejoin: round; vertical-align: -3px; margin-right: 6px; }
+.dialogo-entregar { max-width: 520px; }
+.dialogo-entregar h2 { margin-bottom: 4px; }
+.dialogo-entregar .migas { margin-bottom: 18px; }
+.pasos-entrega { list-style: none; counter-reset: paso; display: flex; flex-direction: column; gap: 12px; margin-bottom: 18px; }
+.pasos-entrega li { counter-increment: paso; display: flex; align-items: center; gap: 14px;
+  padding: 14px 16px; background: var(--violeta-suave); border-radius: 12px; }
+.pasos-entrega li::before { content: counter(paso); flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%;
+  background: var(--violeta); color: var(--blanco); font-weight: 800; font-size: 13px;
+  display: flex; align-items: center; justify-content: center; }
+.pasos-entrega li > div { flex: 1; display: flex; flex-direction: column; }
+.pasos-entrega small { color: var(--texto-suave); font-size: 12px; }
+.pasos-entrega .boton { white-space: nowrap; }
+

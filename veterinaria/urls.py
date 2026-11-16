@@ -13,6 +13,8 @@ urlpatterns = [
     path('mascotas/<int:pk>/reactivar/', views.reactivar, name='reactivar'),
     path('mascotas/<int:pk>/consulta/', views.nueva_consulta, name='nueva_consulta'),
     path('mascotas/<int:pk>/vacuna/', views.registrar_vacuna, name='registrar_vacuna'),
+    path('mascotas/<int:pk>/historial/pdf/', views.historial_descargar, name='historial_descargar'),
+    path('mascotas/<int:pk>/historial/whatsapp/', views.enviar_historial, name='enviar_historial'),
 
     path('duenos/', views.duenos, name='duenos'),
     path('duenos/nuevo/', views.dueno_form, name='nuevo_dueno'),

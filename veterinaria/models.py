@@ -173,7 +173,8 @@ class Turno(models.Model):
 
 
 class Recordatorio(models.Model):
-    TIPO = [('turno', 'Turno'), ('vacuna', 'Vacuna'), ('agenda', 'Agenda del día')]
+    TIPO = [('turno', 'Turno'), ('vacuna', 'Vacuna'), ('agenda', 'Agenda del día'),
+            ('historial', 'Historial clínico')]
     ESTADO = [('pendiente', 'Pendiente'), ('enviado', 'Enviado'), ('fallido', 'Fallido')]
 
     id = models.AutoField(primary_key=True, db_column='id_recordatorio')

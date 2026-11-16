@@ -47,6 +47,12 @@
     <a href="{% url 'registrar_vacuna' mascota.pk %}" class="boton secundario">+ Registrar vacuna</a>
   </div>
   {% endif %}
+  <div class="botones">
+    <button class="boton secundario" type="button" onclick="document.getElementById('entregar').showModal()">
+      <svg viewBox="0 0 24 24" class="icono-doc"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>
+      Historial clínico
+    </button>
+  </div>
 </div>
 
 <section class="linea-tiempo">
@@ -71,6 +77,34 @@
     <p class="vacio tarjeta">Sin historial todavía.</p>
   {% endfor %}
 </section>
+
+<dialog id="entregar" class="tarjeta dialogo-entregar">
+  <h2>Historial clínico de {{ mascota }}</h2>
+  <p class="migas">Se genera un PDF con todas las consultas y vacunas del paciente, listo para entregarle al dueño.</p>
+
+  <ol class="pasos-entrega">
+    <li>
+      <div>
+        <b>Descargá el PDF</b>
+        <small>Se guarda en tu carpeta de Descargas.</small>
+      </div>
+      <a href="{% url 'historial_descargar' mascota.pk %}" class="boton">Descargar PDF</a>
+    </li>
+    {% if mascota.dueno.telefono %}
+    <li>
+      <div>
+        <b>Abrí el chat y adjuntalo</b>
+        <small>Se abre WhatsApp con el mensaje escrito para {{ mascota.dueno }}.</small>
+      </div>
+      <a href="{% url 'enviar_historial' mascota.pk %}" target="_blank" class="boton whatsapp">Abrir WhatsApp</a>
+    </li>
+    {% endif %}
+  </ol>
+
+  <div class="acciones-form" style="justify-content:flex-end">
+    <div><button type="button" class="boton secundario" onclick="this.closest('dialog').close()">Cerrar</button></div>
+  </div>
+</dialog>
 
 {% if puede_recepcion %}
 <dialog id="baja" class="tarjeta">

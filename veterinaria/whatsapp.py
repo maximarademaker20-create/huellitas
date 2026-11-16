@@ -50,3 +50,8 @@ def mensaje_agenda(dia, turnos):
     total = len(turnos)
     texto += f'Total: {total} turno{"s" if total != 1 else ""}. 🐾'
     return texto
+
+
+def mensaje_historial(mascota):
+    return (f'¡Hola {mascota.dueno.nombre}! Te enviamos el historial clínico de '
+            f'{mascota.nombre} desde la veterinaria. Cualquier duda, escribinos. 🐾')

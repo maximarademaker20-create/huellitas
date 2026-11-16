@@ -5,12 +5,14 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.db.models import Q
+from django.http import FileResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 
 from . import whatsapp
+from .pdf import historial_pdf
 from .forms import (BajaForm, ConsultaForm, DuenoForm, EspecieForm, MascotaForm,
                     RazaForm, TurnoForm, VacunaAplicadaForm)
 from usuarios.models import Perfil
@@ -90,6 +92,23 @@ def ficha(request, pk):
         "baja_form": BajaForm(),
     }
     return render(request, "veterinaria/ficha.html", datos)
+
+
+@login_required
+def historial_descargar(request, pk):
+    mascota = get_object_or_404(Mascota.objects.select_related("raza__especie", "dueno"), pk=pk)
+    archivo = historial_pdf(mascota, mascota.historial(), date.today())
+    nombre = f"historial_{mascota.nombre.lower().replace(' ', '_')}.pdf"
+    print(f">>> PDF del historial de {mascota.nombre} generado ({nombre})")
+    return FileResponse(archivo, as_attachment=True, filename=nombre)
+
+
+@login_required
+def enviar_historial(request, pk):
+    mascota = get_object_or_404(Mascota.objects.select_related("dueno"), pk=pk)
+    Recordatorio.objects.create(tipo="historial", fecha_envio=timezone.now(), estado="enviado")
+    print(f">>> Historial de {mascota.nombre} enviado por WhatsApp a {mascota.dueno}")
+    return redirect(whatsapp.enlace(mascota.dueno.telefono, whatsapp.mensaje_historial(mascota)))
 
 
 @login_required
